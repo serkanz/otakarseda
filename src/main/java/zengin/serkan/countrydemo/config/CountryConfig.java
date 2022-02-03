@@ -43,6 +43,8 @@ public class CountryConfig {
                          @Value("${countryconfig.proxy.host}") String proxyHost,
                          @Value("${countryconfig.proxy.port}") int proxyPort,
                          @Value("${countryconfig.useproxy}") Boolean useproxy) {
+
+        //I needed to add proxy configration to ovecome connection issues
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
 
@@ -57,6 +59,7 @@ public class CountryConfig {
         };
         RestTemplate restTemplate = new RestTemplate(requestFactory);
 
+        //Response from https://raw.githubusercontent.com/mledoze/countries/master/countries.json comes as text/plain, so I had to add this converter
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setSupportedMediaTypes(Arrays.asList(MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON));
         restTemplate.getMessageConverters().add(0, converter);
